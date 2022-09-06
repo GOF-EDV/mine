@@ -1,12 +1,12 @@
-import Benefits from "../../layouts/home/beneficios";
-import Hero from "../../layouts/home/hero";
+import Benefits from '../../layouts/home/beneficios'
+import Hero from '../../layouts/home/hero'
 
-function Home() {
-    return (
-        <>
-            <Hero/>
-            <Benefits/>
-        </>
-    )
+function Home () {
+  return (
+    <>
+      <Hero />
+      <Benefits />
+    </>
+  )
 }
-export default Home;
+export default Home

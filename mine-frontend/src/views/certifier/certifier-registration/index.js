@@ -8,24 +8,22 @@ import {
   Button,
   Heading,
   Text,
-  useToast,
-} from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
-import {ipfs, ipfsPublicURL} from "../../../config/ipfs";
-import useMineFunctions from "../../../hooks/useMineFunctions";
+  useToast
+} from '@chakra-ui/react'
+import { useCallback, useEffect, useState } from 'react'
+import { ipfs, ipfsPublicURL } from '../../../config/ipfs'
+import useMineFunctions from '../../../hooks/useMineFunctions'
 
-
-export default function CertifierRegistration() {
-  const [name, setName] = useState("");
-  const [tel, setTel] = useState("");
-  const [file, setFile] = useState();
-  const [cedula, setCedula] = useState("");
-  const [email, setEmail] = useState("");
-  const [buttonMsg, setButtonMsg] = useState("Registrarme");
+export default function CertifierRegistration () {
+  const [name, setName] = useState('')
+  const [tel, setTel] = useState('')
+  const [file, setFile] = useState()
+  const [cedula, setCedula] = useState('')
+  const [email, setEmail] = useState('')
+  const [buttonMsg, setButtonMsg] = useState('Registrarme')
   const { getFee, registerAsCertifier } = useMineFunctions()
-  const [fee, setFee] = useState(0);
-  const toast = useToast();
-
+  const [fee, setFee] = useState(0)
+  const toast = useToast()
 
   useEffect(() => {
     getFee(0).then(_fee => setFee(_fee)).catch(err => setFee(0))
@@ -43,13 +41,13 @@ export default function CertifierRegistration() {
     if (!name || !tel || !file || !cedula || !email) {
       toast({
         title: 'Formulario invalido',
-        description: "Hay campos faltantes",
+        description: 'Hay campos faltantes',
         status: 'error',
         duration: 3000
       })
-      return;
+      return
     }
-    
+
     const { cid } = await ipfs.add(JSON.stringify(data))
     return cid
   }, [name, tel, file, cedula, email, toast])
@@ -62,82 +60,82 @@ export default function CertifierRegistration() {
         const url = `${ipfsPublicURL}/${cid}`
         return registerAsCertifier(url)
       })
-      .then(() =>  setButtonMsg('Registrado'))
+      .then(() => setButtonMsg('Registrado'))
   }
   const pdfToBase64 = (e) => {
-      if (e.target.files.length > 0) {
-          const reader = new FileReader()
-          reader.onload = function(event) {
-              setFile(event.target.result)
-          }
-          reader.readAsDataURL(e.target.files[0])
-      } else {
-        setFile("")
+    if (e.target.files.length > 0) {
+      const reader = new FileReader()
+      reader.onload = function (event) {
+        setFile(event.target.result)
       }
+      reader.readAsDataURL(e.target.files[0])
+    } else {
+      setFile('')
+    }
   }
 
   return (
     <Flex
-      minH={"calc(100vh - 130px)"}
-      align={"center"}
-      justify={"center"}
-      bg={"gray.50"}
+      minH='calc(100vh - 130px)'
+      align='center'
+      justify='center'
+      bg='gray.50'
     >
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-        <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Registrate como Perito</Heading>
-          <Text fontSize={"md"} textAlign={"center"} color={"gray.600"}>
+      <Stack spacing={8} mx='auto' maxW='lg' py={12} px={6}>
+        <Stack align='center'>
+          <Heading fontSize='4xl'>Registrate como Perito</Heading>
+          <Text fontSize='md' textAlign='center' color='gray.600'>
             Debes estar certificado por los organismos correspondientes
           </Text>
         </Stack>
         <Box
 
-          rounded={"lg"}
-          bg={"white"}
-          boxShadow={"lg"}
+          rounded='lg'
+          bg='white'
+          boxShadow='lg'
           p={8}
         >
           <Stack spacing={4}>
-            <FormControl id="name">
+            <FormControl id='name'>
               <FormLabel>Nombre completo</FormLabel>
-              <Input value={name} onChange={(e) => setName(e.target.value)} required type="text" />
+              <Input value={name} onChange={(e) => setName(e.target.value)} required type='text' />
             </FormControl>
-            <FormControl id="cedula">
+            <FormControl id='cedula'>
               <FormLabel>Cedula</FormLabel>
-              <Input value={cedula} onChange={(e) => setCedula(e.target.value)} required type="text" />
+              <Input value={cedula} onChange={(e) => setCedula(e.target.value)} required type='text' />
             </FormControl>
-            <FormControl id="email">
+            <FormControl id='email'>
               <FormLabel>Correo Electronico</FormLabel>
-              <Input value={email} onChange={(e) => setEmail(e.target.value)} required type="email" />
+              <Input value={email} onChange={(e) => setEmail(e.target.value)} required type='email' />
             </FormControl>
-            <FormControl id="tel">
+            <FormControl id='tel'>
               <FormLabel>Numero telefonico</FormLabel>
-              <Input value={tel} onChange={(e) => setTel(e.target.value)} required type="tel" />
+              <Input value={tel} onChange={(e) => setTel(e.target.value)} required type='tel' />
             </FormControl>
-            <FormControl id="titulo">
+            <FormControl id='titulo'>
               <FormLabel>Certificado de peritaje</FormLabel>
-              <Input onChange={(e) => pdfToBase64(e)} accept='application/pdf' border={"none"} type="file" required />
+              <Input onChange={(e) => pdfToBase64(e)} accept='application/pdf' border='none' type='file' required />
             </FormControl>
             <Stack spacing={10}>
               <Button
                 onClick={onSubmit}
-                bg={"blue.400"}
-                color={"white"}
+                bg='blue.400'
+                color='white'
                 disabled={buttonMsg !== 'Registrarme'}
                 isDisabled={buttonMsg !== 'Registrarme'}
                 _hover={{
-                  bg: "blue.500",
+                  bg: 'blue.500'
                 }}
               >
                 {buttonMsg}
               </Button>
             </Stack>
-            <Text color={'gray.500'} fontSize={'sm'} textAlign={'center'}>
+            <Text color='gray.500' fontSize='sm' textAlign='center'>
               El coste de registro es {(fee / 1e9).toFixed(2)} GWEI
             </Text>
           </Stack>
         </Box>
       </Stack>
     </Flex>
-  );
+  )
 }
