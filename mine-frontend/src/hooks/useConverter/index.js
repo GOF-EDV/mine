@@ -12,7 +12,9 @@ const useConverter = () => {
   }, [active, chainId, library?.eth?.Contract]);
 
   const getETHPrice = useCallback(async () => {
-    return await converter.methods.getLatestPrice().call()
+    if(converter) {
+      return await converter.methods.getLatestPrice().call()
+    }
   }, [converter])
 
   return {converter, getETHPrice};
